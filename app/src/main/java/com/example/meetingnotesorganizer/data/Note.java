@@ -4,14 +4,14 @@ import java.util.ArrayList;
 
 public class Note extends Model {
     private String title, date, time, description;
-    private ArrayList<String> meetingParticipants;
+    private ArrayList<String> participants;
 
     public Note(String title, String date, String time, String description, ArrayList<String> meetingParticipants) {
         this.title = title;
         this.date = date;
         this.time = time;
         this.description = description;
-        this.meetingParticipants = meetingParticipants;
+        this.participants = meetingParticipants;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class Note extends Model {
                 ", date='" + date + '\'' +
                 ", time='" + time + '\'' +
                 ", description='" + description + '\'' +
-                ", meetingParticipants=" + meetingParticipants +
+                ", meetingParticipants=" + participants +
                 ", id=" + id +
                 '}';
     }
@@ -58,11 +58,11 @@ public class Note extends Model {
         this.description = description;
     }
 
-    public ArrayList<String> getMeetingParticipants() {
-        return meetingParticipants;
+    public ArrayList<String> getParticipants() {
+        return participants;
     }
 
-    public void setMeetingParticipants(ArrayList<String> meetingParticipants) {
-        this.meetingParticipants = meetingParticipants;
+    public void setParticipants(ArrayList<String> meetingParticipants) {
+        this.participants = meetingParticipants;
     }
 }

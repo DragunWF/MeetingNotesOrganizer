@@ -4,13 +4,21 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.widget.DatePicker;
+import android.widget.EditText;
 
 import androidx.fragment.app.DialogFragment;
+
+import com.example.meetingnotesorganizer.R;
 
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment
         implements DatePickerDialog.OnDateSetListener {
+    private EditText dateText;
+
+    public void setDateText(EditText text) {
+        dateText = text;
+    }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -25,6 +33,10 @@ public class DatePickerFragment extends DialogFragment
     }
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        // Do something with the date the user picks.
+        String date = day + "/" + month + "/" + year;
+        if (dateText != null) {
+            dateText.setText(date);
+        }
     }
 }
+
