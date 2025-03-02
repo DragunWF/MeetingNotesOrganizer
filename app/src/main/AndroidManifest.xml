@@ -13,13 +13,13 @@
         android:theme="@style/Theme.MeetingNotesOrganizer"
         tools:targetApi="31">
         <activity
-            android:name=".ViewNotes"
+            android:name=".ViewNoteActivity"
             android:exported="false" />
         <activity
             android:name=".EditNotes"
             android:exported="false" />
         <activity
-            android:name=".CreateNotes"
+            android:name=".NoteEditorActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
