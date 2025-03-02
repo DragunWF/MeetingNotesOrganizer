@@ -74,6 +74,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
      */
     public NoteAdapter(List<Note> dataSet, Context context) {
         localDataSet = dataSet;
+        this.context = context;
     }
 
     // Create new views (invoked by the layout manager)
