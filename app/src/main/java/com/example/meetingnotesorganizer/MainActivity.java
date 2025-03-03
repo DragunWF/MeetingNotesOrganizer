@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private void setRecycler() {
         notesRecycler.setHasFixedSize(false);
 
-        notesAdapter = new NoteAdapter(DatabaseHelper.getNoteBank().getAll(), this);
+        notesAdapter = new NoteAdapter(DatabaseHelper.getNoteBank().getAll(), this, getSupportFragmentManager());
         notesRecycler.setAdapter(notesAdapter);
 
         layoutManager = new LinearLayoutManager(this);

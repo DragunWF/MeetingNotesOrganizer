@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.meetingnotesorganizer.data.Note;
+import com.example.meetingnotesorganizer.fragments.ConfirmationDialogFragment;
 import com.example.meetingnotesorganizer.fragments.DatePickerFragment;
 import com.example.meetingnotesorganizer.fragments.TimePickerFragment;
 import com.example.meetingnotesorganizer.helpers.DatabaseHelper;
@@ -95,6 +96,8 @@ public class NoteEditorActivity extends AppCompatActivity {
                 NoteService.add(new Note(title, date, time, description, participantsList));
                 Utils.longToast("Note has successfully been added!", NoteEditorActivity.this);
             }
+
+            finish();
         });
 
         dateText.setOnClickListener(v -> {

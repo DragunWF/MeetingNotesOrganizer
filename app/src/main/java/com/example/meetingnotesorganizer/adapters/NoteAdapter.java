@@ -9,11 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.meetingnotesorganizer.R;
 import com.example.meetingnotesorganizer.ViewNoteActivity;
 import com.example.meetingnotesorganizer.data.Note;
+import com.example.meetingnotesorganizer.fragments.ConfirmationDialogFragment;
 import com.example.meetingnotesorganizer.helpers.DatabaseHelper;
 import com.example.meetingnotesorganizer.helpers.Utils;
 import com.example.meetingnotesorganizer.services.NoteService;
@@ -24,6 +26,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     private List<Note> localDataSet;
     private Context context;
+    private FragmentManager supportFragmentManager;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -72,9 +75,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
      * @param dataSet String[] containing the data to populate views to be used
      * by RecyclerView
      */
-    public NoteAdapter(List<Note> dataSet, Context context) {
+    public NoteAdapter(List<Note> dataSet, Context context, FragmentManager supportFragmentManager) {
         localDataSet = dataSet;
         this.context = context;
+        this.supportFragmentManager = supportFragmentManager;
     }
 
     // Create new views (invoked by the layout manager)
@@ -105,8 +109,12 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             context.startActivity(intent);
         });
         viewHolder.getDeleteBtn().setOnClickListener(v -> {
-            NoteService.delete(note.getId());
-            Utils.longToast(note.getTitle() + " note has been deleted!", context);
+            ConfirmationDialogFragment dialog = new ConfirmationDialogFragment();
+            dialog.show(supportFragmentManager, "confirmation dialog");
+            if (dialog.isPositiveClicked()) {
+                NoteService.delete(note.getId());
+                Utils.longToast(note.getTitle() + " note has been deleted!", context);
+            }
         });
     }
 
