@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.example.meetingnotesorganizer.data.Model;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +27,9 @@ public class ModelBank<T extends Model> {
     }
 
     public List<T> getAll() {
-        // TODO: Implement this and study how it works from within
-        return new ArrayList<>();
+        String json = sharedPref.getString(modelKey, "[]");
+        Type type = TypeToken.getParameterized(List.class, modelClass).getType();
+        return gson.fromJson(json, type);
     }
 
     public T get(int id) {
@@ -63,8 +66,10 @@ public class ModelBank<T extends Model> {
         save(models);
     }
 
-    public void save(List<T> models) {
-        // TODO: Implement this and study how it works from within
+    public void save(List<T> updatedModels) {
+        String json = gson.toJson(updatedModels);
+        editor.putString(modelKey, json);
+        editor.apply();
     }
 
     public void log() {
