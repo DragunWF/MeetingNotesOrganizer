@@ -54,14 +54,14 @@
                 android:layout_gravity="center"/>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/sortImageBtnUp"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="end"
                 app:srcCompat="@android:drawable/arrow_up_float" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/sortImageBtnDown"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_gravity="end"

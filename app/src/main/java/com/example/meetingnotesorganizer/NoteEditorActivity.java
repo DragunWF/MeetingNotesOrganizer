@@ -12,7 +12,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.meetingnotesorganizer.data.Note;
-import com.example.meetingnotesorganizer.fragments.ConfirmationDialogFragment;
 import com.example.meetingnotesorganizer.fragments.DatePickerFragment;
 import com.example.meetingnotesorganizer.fragments.TimePickerFragment;
 import com.example.meetingnotesorganizer.helpers.DatabaseHelper;
@@ -55,6 +54,9 @@ public class NoteEditorActivity extends AppCompatActivity {
             supportFragmentManager = getSupportFragmentManager();
 
             setClickListeners();
+            if (isEditForm) {
+                autoFillFields();
+            }
         } catch (Exception err) {
             err.printStackTrace();
             Utils.longToast(err.getMessage(), this);
@@ -110,5 +112,15 @@ public class NoteEditorActivity extends AppCompatActivity {
            timePicker.setTimeText(timeText);
            timePicker.show(supportFragmentManager, "time picker");
         });
+    }
+
+    private void autoFillFields() {
+        Note note = DatabaseHelper.getNoteBank().get(currentNoteId);
+
+        titleText.setText(note.getTitle());
+        dateText.setText(note.getDate());
+        timeText.setText(note.getTime());
+        descriptionText.setText(note.getDescription());
+        participantsText.setText(String.join(", ", note.getParticipants()));
     }
 }

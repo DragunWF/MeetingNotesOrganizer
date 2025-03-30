@@ -8,18 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.content.DialogInterface;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.meetingnotesorganizer.R;
 import com.example.meetingnotesorganizer.ViewNoteActivity;
 import com.example.meetingnotesorganizer.data.Note;
-import com.example.meetingnotesorganizer.fragments.ConfirmationDialogFragment;
 import com.example.meetingnotesorganizer.helpers.DatabaseHelper;
 import com.example.meetingnotesorganizer.helpers.Utils;
 import com.example.meetingnotesorganizer.services.NoteService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
@@ -109,12 +111,24 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
             context.startActivity(intent);
         });
         viewHolder.getDeleteBtn().setOnClickListener(v -> {
-            ConfirmationDialogFragment dialog = new ConfirmationDialogFragment();
-            dialog.show(supportFragmentManager, "confirmation dialog");
-            if (dialog.isPositiveClicked()) {
-                NoteService.delete(note.getId());
-                Utils.longToast(note.getTitle() + " note has been deleted!", context);
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    NoteService.delete(note.getId());
+                    Utils.longToast(note.getTitle() + " note has been deleted!", context);
+                    updateDataSet();
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    // User cancels the dialog.
+                }
+            });
+            builder.setMessage("Are you sure you want to delete this note?");
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         });
     }
 
@@ -125,10 +139,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.ViewHolder> {
 
     public void updateDataSet(List<Note> updatedDataSet) {
         localDataSet.clear();
-        for (Note note : updatedDataSet) {
-            localDataSet.add(note);
-        }
+        localDataSet.addAll(updatedDataSet);
         notifyDataSetChanged();
+    }
+
+    public void reverseDataSet() {
+        List<Note> reversed = new ArrayList<>();
+        for (int i = localDataSet.size() - 1; i >= 0; i--) {
+            reversed.add(localDataSet.get(i));
+        }
+        updateDataSet(reversed);
     }
 
     // Return the size of your dataset (invoked by the layout manager)

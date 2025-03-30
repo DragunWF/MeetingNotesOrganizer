@@ -3,6 +3,7 @@ package com.example.meetingnotesorganizer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SearchView;
 
 import androidx.activity.EdgeToEdge;
@@ -14,11 +15,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.meetingnotesorganizer.adapters.NoteAdapter;
+import com.example.meetingnotesorganizer.data.Note;
 import com.example.meetingnotesorganizer.helpers.DatabaseHelper;
 import com.example.meetingnotesorganizer.helpers.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private Button addBtn;
+    private ImageView sortBtnUp, sortBtnDown;
 
     private RecyclerView notesRecycler;
     private NoteAdapter notesAdapter;
@@ -45,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             DatabaseHelper.initialize(this);
+            DatabaseHelper.addDummyData();
 
             notesRecycler = findViewById(R.id.notesRecycler);
             addBtn = findViewById(R.id.addBtn);
             searchBar = findViewById(R.id.searchBar);
+            sortBtnUp = findViewById(R.id.sortImageBtnUp);
+            sortBtnDown = findViewById(R.id.sortImageBtnDown);
 
             setButtons();
             setRecycler();
@@ -62,6 +71,12 @@ public class MainActivity extends AppCompatActivity {
     private void setButtons() {
         addBtn.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, NoteEditorActivity.class));
+        });
+        sortBtnUp.setOnClickListener(v -> {
+            reverseNoteList();
+        });
+        sortBtnDown.setOnClickListener(v -> {
+            reverseNoteList();
         });
     }
     
@@ -90,8 +105,22 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void update(String query) {
+                List<Note> results = new ArrayList<>();
 
+                query = query.toLowerCase();
+                for (Note note : DatabaseHelper.getNoteBank().getAll()) {
+                    String title = note.getTitle().toLowerCase();
+                    if (title.contains(query)) {
+                        results.add(note);
+                    }
+                }
+
+                notesAdapter.updateDataSet(results);
             }
         });
+    }
+
+    private void reverseNoteList() {
+        notesAdapter.reverseDataSet();
     }
 }
